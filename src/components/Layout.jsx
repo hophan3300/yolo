@@ -6,7 +6,6 @@ import {
 import Header from './Header'
 import Footer from './Footer'
 import Routes from '../routes/Routes'
-import ProductViewModal from '../components/ProductViewModal'
 
 const Layout = () => {
    return (
@@ -20,7 +19,6 @@ const Layout = () => {
                </div>
             </div>
            <Footer/>
-           <ProductViewModal/>
           </div>
         )}/>
       </Router>

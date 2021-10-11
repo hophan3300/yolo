@@ -93,16 +93,16 @@
          &__name, &__price{
             font-size: 1.25rem;
          }
+      }
+      
+      &__del{
+         font-size: 1.5rem;
+         
+         i{
+            cursor: pointer;
 
-         &__del{
-            font-size: 1.25rem;
-            
-            i{
-               cursor: pointer;
-
-               &:hover{
-                  color: $main-color;
-               }
+            &:hover{
+               color: $main-color;
             }
          }
       }
