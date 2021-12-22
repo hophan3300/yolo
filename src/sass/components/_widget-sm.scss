@@ -1,0 +1,58 @@
+.widget-sm{
+   flex:1;
+   padding: 20px;
+   -webkit-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75); 
+   box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+   margin-right: 20px;
+
+   .title{
+      font-size: 30px;
+      font-weight: 600;
+   }
+
+   .list{
+      margin: 0;
+      padding: 0;
+
+
+      .item{
+         @include flex(center,space-between);
+         margin:20px 0;
+
+         img{
+            height:40px;
+            width: 40px;
+            border-radius:50%;
+            object-fit: cover;
+         }
+
+         .user{
+            display:flex;
+            flex-direction: column;
+
+            &__name{
+               font-weight: 600;
+            }
+
+            &__title{
+               font-weight: 300;
+            }
+         }
+
+         .btn{
+            @include flex(center,unset);
+            border:none;
+            border-radius:10px;
+            padding: 7px 10px;
+            background-color:#eeeef7;
+            color:#555;
+            cursor: pointer;
+
+            .bx{
+               font-size: 16px;
+               margin-right: 5px;
+            }
+         }
+      }
+   }
+}

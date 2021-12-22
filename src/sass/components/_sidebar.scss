@@ -1,0 +1,42 @@
+.sidebar{
+   flex: 1;
+   height: calc(100vh - 50px);
+   background-color: rgb(251, 251,255);
+   position: sticky;
+   top: 50px;
+
+   &__wrapper{
+      margin:18px;
+      color:#555;
+
+      .menu{
+         margin-bottom: 5px;
+
+         .title{
+            font-size: 13px;
+            color:rgb(187,186,186);
+         }
+         
+         .list{
+            padding: 5px;
+            
+            .item{
+               padding:5px;
+               margin: 4px 0;
+               cursor: pointer;
+               border-radius: 10px;
+               @include flex(center, unset);
+
+               &.active, &:hover{
+                  background-color: rgb(240,240,250);
+               }
+
+               .bx{
+                  margin-right: 8px;
+                  font-size: 20px;
+               }
+            }
+         }
+      }
+   }
+}

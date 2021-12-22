@@ -4,8 +4,8 @@ const colors = [
        color: "white"
    },
    {
-       display: "Hồng",
-       color: "pink"
+       display: "Đỏ",
+       color: "red"
    },
    {
        display: "Đen",
@@ -18,6 +18,10 @@ const colors = [
    {
        display: "Cam",
        color: "orange"
+   },
+   {
+       display: "Hồng",
+       color: "pink"
    },
    {
        display: "Xanh dương",

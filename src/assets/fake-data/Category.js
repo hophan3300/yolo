@@ -4,7 +4,7 @@ const category = [
        categorySlug: "ao-thun"
    },
    {
-       display: "Áo somi",
+       display: "Áo sơmi",
        categorySlug: "ao-somi"
    },
    {

@@ -92,6 +92,11 @@
 
            &__btn {
                overflow: hidden;
+
+               .btn__txt{
+                   padding: 1.2rem 2.4rem;
+                   font-size: 1.2rem;
+               } 
            }
 
            &__title > span,

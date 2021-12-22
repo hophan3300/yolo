@@ -1,4 +1,4 @@
-const size = [
+const sizes = [
    {
        display: "S",
        size: "s"
@@ -21,4 +21,4 @@ const size = [
    },
 ]
 
-export default size
+export default sizes

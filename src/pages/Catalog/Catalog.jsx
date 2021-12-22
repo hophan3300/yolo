@@ -1,176 +1,121 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react'
-import Helmet from '../../components/Helmet'
-import productData from '../../assets/fake-data/Product'
-import category from '../../assets/fake-data/Category'
-import Checkbox from '../../components/Checkbox'
+import React,{ useState, useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+
+import Grid from '../../components/Grid'
+import ProductCard from '../../components/ProductCard'
 import colors from '../../assets/fake-data/ProductColor'
-import size from '../../assets/fake-data/ProductSize'
-import Button from '../../components/Button'
-import InfinityList from '../../components/InfinityList'
+import sizes from '../../assets/fake-data/ProductSize'
+import category from '../../assets/fake-data/Category'
+import { allProducts } from '../../redux/apiCalls'
 
 const Catalog = () => {
 
-   const initFilter = {
-      category: [],
-      color: [],
-      size: []
-  }
-
-  const productList = productData.getAllProducts()
-
-  const [product, setProduct] = useState(productList)
-
-  const [filter, setFilter] = useState(initFilter)
-
-  const filterSelect = (type, checked, item) => {
-      if (checked) {
-          switch(type) {
-              case "CATEGORY":
-                  setFilter({...filter, category: [...filter.category, item.categorySlug]})
-                  break
-              case "COLOR":
-                  setFilter({...filter, color: [...filter.color, item.color]})
-                  break
-              case "SIZE":
-                  setFilter({...filter, size: [...filter.size, item.size]})
-                  break
-              default:
-          }
-      } else {
-          switch(type) {
-              case "CATEGORY":
-                  const newCategory = filter.category.filter(e => e !== item.categorySlug)
-                  setFilter({...filter, category: newCategory})
-                  break
-              case "COLOR":
-                  const newColor = filter.color.filter(e => e !== item.color)
-                  setFilter({...filter, color: newColor})
-                  break
-              case "SIZE":
-                  const newSize = filter.size.filter(e => e !== item.size)
-                  setFilter({...filter, size: newSize})
-                  break
-              default:
-          }
-      }
-  }
+   const [filter, setFilter] = useState({})
+   const [sort, setSort] = useState("")
+   const [filterProduct, setFilterProduct] = useState([])
+   const [newProducts, setNewProducts] = useState([])
    
-   const updateProduct = useCallback(
-      () => {
-          let temp = productList
+   const dispatch = useDispatch()
 
-          if (filter.category.length > 0) {
-              temp = temp.filter(e => filter.category.includes(e.categorySlug))
-          }
+   const handleFilter = (e) => {
+      setFilter({
+         ...filter,
+         [e.target.name]: e.target.value
+      })
+   }
 
-          if (filter.color.length > 0) {
-              temp = temp.filter(e => {
-                  const check = e.colors.find(color => filter.color.includes(color))
-                  return check !== undefined
-              })
-          }
+   useEffect(() => {
+     allProducts(dispatch)
+   }, [dispatch])
 
-          if (filter.size.length > 0) {
-              temp = temp.filter(e => {
-                  const check = e.size.find(size => filter.size.includes(size))
-                  return check !== undefined
-              })
-          }
-          
-          setProduct(temp)
-      },
-      [filter, productList],
-  )
+   const products = useSelector(state => state.products.allProducts)
 
-  useEffect(() => {
-      updateProduct()
-  }, [updateProduct])
+   useEffect(() => {
+      setNewProducts(products.map((item, index) => ({...item, key: index})))
+   },[products])
+   
+   useEffect(() => {
+      setFilterProduct(newProducts.filter(item => 
+      Object.entries(filter).every(([key,value]) => value === "" ? item[key] : item[key].includes(value))))
+   }, [filter,newProducts])
 
-  const clearFilter = () => {
-     setFilter(initFilter)
-  }
+  
+   useEffect(() => {
+      if(sort === 'popular'){
+         setFilterProduct(item => [...item].sort((a,b) => a.key - b.key))
+      }
+      if(sort === "incr"){
+         setFilterProduct(item => [...item].sort((a, b) => a.price - b.price))
+      }if(sort === "descr"){
+         setFilterProduct(item => [...item].sort((a,b) => b.price - a.price))
+      }
+   }, [sort,filter])
 
-  const filterRef = useRef(null)
-
-  const showHiddenFilter = () => filterRef.current.classList.toggle('active')
 
    return (
-      <Helmet title="Sản phẩm">
-         <div className="catalog">
-            <div className="catalog__filter" ref={filterRef}>
-               <div className="catalog__filter__close" onClick={() => showHiddenFilter()}>
-                  <i className="bx bx-left-arrow-alt"></i>
-               </div>
-               <div className="catalog__filter__widget">
-                  <div className="catalog__filter__widget__title">
-                     danh mục sản phẩm
-                  </div>
-                  <div className="catalog__filter__widget__content">
+      <div className="catalog">
+         <div className="catalog__top">
+            <div className="catalog__top__content">
+               <h2>lọc sản phẩm:</h2>
+               <select name="categorySlug" onChange={handleFilter}>
+                     <option value="">Phân loại</option>
                      {
                         category.map((item, index) => (
-                           <div key={index} className="catalog__filter__widget__content__item">
-                              <Checkbox 
-                                 label={item.display}
-                                 onChange={(input) => filterSelect("CATEGORY",input.checked,item)}
-                                 checked={filter.category.includes(item.categorySlug)}
-                              />
-                           </div>
+                           <option 
+                              key={index} 
+                              value={item.categorySlug}
+                           >{item.display}
+                           </option>
                         ))
                      }
-                  </div>
-               </div>
-               <div className="catalog__filter__widget">
-                  <div className="catalog__filter__widget__title">
-                     màu sắc
-                  </div>
-                  <div className="catalog__filter__widget__content">
-                     {
-                        colors.map((item, index) => (
-                           <div key={index} className="catalog__filter__widget__content__item">
-                              <Checkbox 
-                                 label={item.display}
-                                 onChange={(input) => filterSelect("COLOR",input.checked,item)}
-                                 checked={filter.color.includes(item.color)}
-                              />
-                           </div>
-                        ))
-                     }
-                  </div>
-               </div>
-               <div className="catalog__filter__widget">
-                  <div className="catalog__filter__widget__title">
-                     kích cỡ
-                  </div>
-                  <div className="catalog__filter__widget__content">
-                     {
-                        size.map((item, index) => (
-                           <div key={index} className="catalog__filter__widget__content__item">
-                              <Checkbox 
-                                 label={item.display}
-                                 onChange={(input) => filterSelect("SIZE",input.checked,item)}
-                                 checked={filter.size.includes(item.size)}
-                              />
-                           </div>
-                        ))
-                     }
-                  </div>
-               </div>
-               <div className="catalog__filter__widget">
-                  <div className="catalog__filter__widget__content">
-                     <Button size="sm" onClick={clearFilter}>xóa bộ lọc</Button>
-                  </div>
-               </div>
+               </select>
+               <select name="colors" onChange={handleFilter} >
+                  <option value="">Màu sắc</option>
+                  {
+                     colors.map((item, index) => (
+                        <option key={index} value={item.color}>{item.display}</option>
+                     ))
+                  }
+               </select>
+               <select name="size" onChange={handleFilter}>
+                  <option value="">Kích thước</option>
+                  {
+                     sizes.map((item, index) => (
+                        <option key={index} value={item.size}>{item.display}</option>
+                     ))
+                  }
+               </select>
             </div>
-            <div className="catalog__filter__toggle">
-               <Button size="sm" onClick={() => showHiddenFilter()}>bộ lọc</Button>
-            </div>
-            <div className="catalog__content">
-               <InfinityList
-                  data={product}
-               />
+            <div className="catalog__top__content">
+               <h2>Sắp xếp:</h2>
+               <select name="sort" onChange={(e) => setSort(e.target.value) }>
+                  <option value="popular">Phổ biến nhất</option>
+                  <option value="incr">Giá từ thấp đến cao</option>
+                  <option value="descr">Giá từ cao đến thấp</option>
+               </select>
             </div>
          </div>
-      </Helmet>
+         <div className="catalog__content">
+            <Grid 
+               col={4}
+               mdCol={2}
+               smCol={1}
+               gap={10}
+            >
+               { filterProduct?.map((item, index) => (
+                  <ProductCard
+                        key={index}
+                        title={item.title}
+                        img01={item.img01}
+                        img02={item.img02}
+                        price={Number(item.price)}
+                        slug={item.slug}
+                        id={item._id}
+                     />
+               ))}
+            </Grid>
+         </div>
+      </div>
    )
 }
 

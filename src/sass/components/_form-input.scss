@@ -1,0 +1,35 @@
+.form__input{
+   display: flex;
+   flex-direction: column;
+   width: 350px;
+
+   input{
+      margin: 8px 0;
+      padding: 15px;
+      border:1px solid #e0e0e0;
+      border-radius: 5px;
+      outline:none;
+      -webkit-box-shadow: $box-shadow;
+      box-shadow: $box-shadow;
+   }
+
+   label{
+      font-size: 12px;
+      color: gray;
+   }
+
+   span{
+      color: red;
+      font-size: 12px;
+      padding: 3px;
+      display: none;
+   }
+
+   input:invalid[focused="true"]{
+      border: 1px solid red;
+   }
+
+   input:invalid[focused="true"] ~ span{
+      display:block;
+   }
+}

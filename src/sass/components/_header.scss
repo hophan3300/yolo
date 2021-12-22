@@ -48,7 +48,7 @@
        font-size: 1.5rem;
 
        &__item ~ &__item {
-           margin-left: 39px;
+           margin-left: 30px;
 
            @include tablet {
                margin-left: 20px;
@@ -68,6 +68,8 @@
            color: $main-color;
        }
 
+      
+
        &__left,
        &__right {
            @include flex(center, center);
@@ -76,13 +78,16 @@
 
        &__right {
            font-size: 2.25rem;
+           font-weight: 600;
 
            &__item {
                @include flex(center, center);
+               position: relative;
                
                @include tablet {
                    margin-left: 10px;
                }
+
            }
 
            @include mobile {
@@ -136,3 +141,85 @@
        }
    }
 }
+
+
+.dropdown{
+    position: relative;
+    z-index: 99;
+ }
+ 
+ .dropdown__toggle{
+    border:0;
+    outline:0;
+    background-color: transparent;
+    position: relative;
+ }
+ 
+ .dropdown__toggle > i{
+    font-size: 2.25rem;
+    cursor: pointer;
+    font-weight: 500;
+    @include mobile{
+       font-size: 1.5rem;
+      
+    }
+    &:hover{
+       color: $main-color;
+    }
+ }
+ 
+ .dropdown__content{
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: max-content;
+    overflow: hidden;
+    transform-origin: top right;
+    transform: scale(0);
+    transition: transform 0.3s ease 0s;
+    border: 1px solid #e0e0e0;
+    box-shadow: $box-shadow;
+    padding: 7px 10px;
+    background-color:white;
+    border-radius: 10px;
+    
+ 
+    @include tablet {
+       right: 25px;
+    }
+
+    @include mobile {
+        right: 10px;
+    }
+ }
+ 
+ .dropdown__content.active{
+    transform:scale(1);
+    transition: transform 0.5s var(--transition-cubic);
+ }
+ 
+ 
+ .user__list__item{
+    font-size: 20px;
+    font-weight: 400;
+    color: black;
+    @include flex(center, unset);
+    cursor: pointer;
+    margin-bottom: 8px;
+
+    @include mobile {
+        font-size: 16px;
+    }
+    
+    &:last-child{
+       margin-bottom: 0;
+    }
+ 
+    &:hover{
+       color: $main-color;
+    }
+ 
+    & > i {
+       margin-right: 8px;
+    }
+ }

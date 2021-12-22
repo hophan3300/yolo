@@ -1,17 +1,33 @@
-import React from 'react'
-import Helmet from '../../components/Helmet'
+import React,{ useEffect} from 'react'
 import { Link } from 'react-router-dom'
+import {useDispatch, useSelector} from 'react-redux'
+
 import Slide from '../../components/Slide'
+import Helmet from '../../components/Helmet'
 import slideData from '../../assets/fake-data/SlideData'
 import { Section , SectionBody, SectionTitle} from '../../components/Section'
 import PolicyCard from '../../components/PolicyCard'
 import Policy from '../../assets/fake-data/Policy'
 import Grid from '../../components/Grid'
-import productData from '../../assets/fake-data/Product'
 import ProductCard from '../../components/ProductCard'
 import banner from '../../assets/images/banner.png'
+import { allProducts } from '../../redux/apiCalls'
 
-const Home = () => {
+const Home = () => { 
+
+   const dispatch = useDispatch()
+
+   useEffect(() => {
+     allProducts(dispatch)
+   }, [dispatch])
+
+   const products = useSelector(state => state.products.allProducts)
+
+   const getProductsRandom = (count) => {
+      const newProduct = [...products].sort(() => Math.random() - 0.5)
+      return newProduct.slice(0,count)
+  }
+
    return (
       <Helmet title="Trang chủ">
          <Slide 
@@ -51,41 +67,16 @@ const Home = () => {
                smCol={1}
                gap={20}
             >
-               { 
-                  productData.getProducts(4).map((item, index) => (
+               {
+                 getProductsRandom(4).map((item, index) => (
                      <ProductCard
                         key={index}
-                        name={item.title}
-                        img01={item.image01}
-                        img02={item.image02}
+                        title={item.title}
+                        img01={item.img01}
+                        img02={item.img02}
                         price={Number(item.price)}
                         slug={item.slug}
-                     />
-                  ))
-               }
-            </Grid>
-            </SectionBody>
-         </Section>
-         <Section>
-            <SectionTitle>
-               sản phẩm mới
-            </SectionTitle>
-            <SectionBody>
-            <Grid 
-               col={4}
-               mdCol={2}
-               smCol={1}
-               gap={20}
-            >
-               { 
-                  productData.getProducts(8).map((item, index) => (
-                     <ProductCard
-                        key={index}
-                        name={item.title}
-                        img01={item.image01}
-                        img02={item.image02}
-                        price={Number(item.price)}
-                        slug={item.slug}
+                        id={item._id}
                      />
                   ))
                }
@@ -101,7 +92,7 @@ const Home = () => {
          </Section>
          <Section>
             <SectionTitle>
-               sản phẩm phổ biến
+               Các sản phẩm khác
             </SectionTitle>
             <SectionBody>
             <Grid 
@@ -111,14 +102,15 @@ const Home = () => {
                gap={20}
             >
                { 
-                  productData.getProducts(12).map((item, index) => (
+                  getProductsRandom(8).map((item, index) => (
                      <ProductCard
                         key={index}
-                        name={item.title}
-                        img01={item.image01}
-                        img02={item.image02}
+                        title={item.title}
+                        img01={item.img01}
+                        img02={item.img02}
                         price={Number(item.price)}
                         slug={item.slug}
+                        id={item._id}
                      />
                   ))
                }
