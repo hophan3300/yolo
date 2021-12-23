@@ -47,7 +47,7 @@ const Product = () => {
       }
       return true
    }
-
+   
    const addToCart = () => {
       if(checked()){
          dispatch(addProduct({...product, size, colors, quantity}))
