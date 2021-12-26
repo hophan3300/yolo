@@ -48,6 +48,11 @@ const cartSlice = createSlice({
          state.quantity -= 1
          state.total -= newItem.quantity * newItem.price
          sortItem(state.products)
+      },
+      removeAllProduct: (state) => {
+         state.products = []
+         state.quantity = 0
+         state.total = 0
       }
    }
 })
@@ -59,5 +64,5 @@ const deleteItem = (arr, item) => arr.filter(i => i.slug !== item.slug || i.colo
 
 const sortItem = (arr) => arr.sort((a,b) => a.key - b.key)
 
-export const {addProduct, updateProduct, removeProduct} = cartSlice.actions
+export const {addProduct, updateProduct, removeProduct, removeAllProduct} = cartSlice.actions
 export default cartSlice.reducer

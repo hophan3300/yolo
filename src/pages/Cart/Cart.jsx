@@ -1,5 +1,5 @@
 import React,{ useState, useEffect}from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import StripeCheckout from 'react-stripe-checkout'
 
@@ -7,6 +7,7 @@ import CartItem from '../../components/CartItem'
 import numberWithCommas from '../../untils/numberWithCommas'
 import Helmet from '../../components/Helmet'
 import {publicReq} from '../../services/api'
+import {removeAllProduct} from '../../redux/cartRedux'
 
 const Cart = () => {
 
@@ -14,6 +15,7 @@ const Cart = () => {
 
    const cart = useSelector(state => state.cart)
 
+   const dispatch = useDispatch()
    
    const money = Math.floor(cart.total / 23000) + 1
 
@@ -35,7 +37,7 @@ const Cart = () => {
             history.push('/success',{data: res.data})
          } catch{}
       }
-      stripeToken && payment()
+      stripeToken && payment() && dispatch(removeAllProduct())
    },[stripeToken,history,money])
    
 
